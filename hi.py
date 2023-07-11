@@ -1,9 +1,17 @@
 import telebot
+from flask import Flask, request
 
 API_TOKEN = '5854990217:AAHljj4XJGdtUnp8fFdoEXBm9EviDNdH7WM'  # Replace with your actual API token
 WEBHOOK_URL = 'https://drab-ruby-seal-hose.cyclic.app/'  # Replace with your webhook URL
 
 bot = telebot.TeleBot(API_TOKEN)
+app = Flask(__name__)
+
+@app.route('/YOUR_WEBHOOK_PATH', methods=['POST'])
+def webhook():
+    update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
+    bot.process_new_updates([update])
+    return 'OK', 200
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
@@ -16,5 +24,8 @@ def handle_start(message):
             bot.reply_to(message, "No start value found in the link.")
 
 if __name__ == '__main__':
-    bot.delete_webhook()
-    bot.polling()
+    bot.remove_webhook()
+    bot.set_webhook(url=WEBHOOK_URL)
+
+    # Run the Flask application
+    app.run(host='0.0.0.0', port=3000)
