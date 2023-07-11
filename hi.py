@@ -6,16 +6,11 @@ bot = telebot.TeleBot(API_TOKEN)
 @bot.message_handler(commands=['start'])
 def handle_start(message):
     if message.text.startswith('/start'):
-        start_value = message.text.split('/start ')[1]
-        bot.reply_to(message, f"Received start value: {start_value}")
-
-@bot.message_handler(commands=['genlink'])
-def handle_genlink(message):
-    bot.reply_to(message, "Please send a file.")
-
-@bot.message_handler(content_types=['document'])
-def handle_file(message):
-    file_id = message.document.file_id
-    bot.reply_to(message, f"Received file ID: {file_id}")
+        split_text = message.text.split('/start ')
+        if len(split_text) > 1:
+            start_value = split_text[1]
+            bot.reply_to(message, f"Received start value: {start_value}")
+        else:
+            bot.reply_to(message, "No start value found in the link.")
 
 bot.polling()
