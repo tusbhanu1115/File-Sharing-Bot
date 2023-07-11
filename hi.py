@@ -16,8 +16,5 @@ def handle_start(message):
             bot.reply_to(message, "No start value found in the link.")
 
 if __name__ == '__main__':
-    bot.remove_webhook()
-    bot.set_webhook(url=WEBHOOK_URL)
-
-    # Start the bot's polling
+    bot.delete_webhook()
     bot.polling()
